@@ -1,6 +1,12 @@
 = Multitenant
 
+*This is a work in progress*, that is based on @wireframe[http://github.com/wireframe]'s work. I refactored his code to work with default_scope rather than the 
+dynamic_default_scoping gem. I also added different validations that protect you from leakage of information (although they're optional).
+
+As mentioned, this is a work in progress that requires more documentation and testing.
+
 When building multitenant applications, never let an unscoped Model.all accidentally leak data to an unintended audience.
+
 
 == Usage
 
