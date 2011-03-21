@@ -1,6 +1,6 @@
 = Multitenant
 
-*This is a work in progress*, that is based on @wireframe[http://github.com/wireframe]'s work. I refactored his code to work with default_scope rather than the 
+*This is a work in progress*, that is based on @wireframe's[http://github.com/wireframe] work. I refactored his code to work with default_scope rather than the 
 dynamic_default_scoping gem. I also added different validations that protect you from leakage of information (although they're optional).
 
 As mentioned, this is a work in progress that requires more documentation and testing.

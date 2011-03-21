@@ -12,16 +12,15 @@ require 'rake'
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "multitenant"
-  gem.homepage = "http://github.com/wireframe/multitenant"
+  gem.name = "aggressive-multitenant"
+  gem.homepage = "http://github.com/arikfr/multitenant"
   gem.license = "MIT"
   gem.summary = %Q{scope database queries to current tenant}
   gem.description = %Q{never let an unscoped Model.all accidentally leak data to an unintended audience.}
-  gem.email = "ryan@codecrate.com"
-  gem.authors = ["Ryan Sonnek"]
+  gem.email = "arik@arikfr.com"
+  gem.authors = ["Arik Fraimovich","Ryan Sonnek"]
   gem.add_runtime_dependency "activerecord", "~> 3.0.3"
   gem.add_runtime_dependency "activesupport", "~> 3.0.3"
-  gem.add_runtime_dependency 'dynamic_default_scoping', '~> 0.0.3'
 end
 Jeweler::RubygemsDotOrgTasks.new
 
