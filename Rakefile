@@ -12,7 +12,7 @@ require 'rake'
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "aggressive-multitenant"
+  gem.name = "aggressive_multitenant"
   gem.homepage = "http://github.com/arikfr/multitenant"
   gem.license = "MIT"
   gem.summary = %Q{scope database queries to current tenant}
