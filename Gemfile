@@ -10,9 +10,9 @@ group :development do
   gem "jeweler", "~> 1.5.2"
   gem "rcov", ">= 0"
   gem 'sqlite3', '~> 1.3.3'
+  gem 'ruby-debug19'
 
   #duplicate runtime dependencies here because bundler and jeweler do not play nice
   gem "activerecord", "~> 3.0.3"
   gem "activesupport", "~> 3.0.3"
-  gem 'dynamic_default_scoping', '~> 0.0.3'
 end
