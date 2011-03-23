@@ -177,6 +177,12 @@ describe Multitenant do
       @user.reload
       @user.company_id.should == @company.id
     end
+    
+    it "should allow setting company through association" do
+      user = User.create! :name => "test"
+      user.company = @company2
+      user.save.should be_true
+    end
 
     it "should prevent changing the tenant id through direct assigment" do
       @user.company = @company2

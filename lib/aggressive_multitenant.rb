@@ -74,7 +74,7 @@ module Multitenant
         # hence might introduce a security breach
         ["#{reflection.name}=", "#{reflection.primary_key_name}="].each do |name| 
           define_method name do |value|
-            super value if new_record?
+            write_attribute name[0..-2], value if new_record?
             # doing nothing. haha
           end
         end
