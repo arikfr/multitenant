@@ -7,6 +7,11 @@ module Multitenant
 
   class << self
     attr_accessor :current_tenant
+    attr_accessor :in_block
+    
+    def initialize
+      in_block = false
+    end
     
     def models
       @models ||= []
@@ -17,25 +22,31 @@ module Multitenant
     # unsets the current tenant after execution
     def with_tenant(tenant, &block)
       Multitenant.current_tenant = tenant
-      save_and_change_default_scope  
+      Multitenant.in_block = true
+      save_and_change_default_scope_for_all
       yield
     ensure
       restore_default_scope
+      Multitenant.in_block = false
       Multitenant.current_tenant = nil
     end
 
+    def save_and_change_default_scope(model_details)
+      model_details[:name].instance_eval do
+        model_details[:default_scoping] = default_scoping.dup
+        default_scope where(model_details[:tenant_key_name] => Multitenant.current_tenant.id)
+      end
+    end
+
     protected
-      def save_and_change_default_scope
-        @models.each do |model|
-          model[:name].instance_eval do
-            model[:default_scoping] = default_scoping.dup
-            default_scope where(model[:tenant_key_name] => Multitenant.current_tenant.id)
-          end
+      def save_and_change_default_scope_for_all
+        models.each do |model|
+          save_and_change_default_scope model
         end
       end
 
       def restore_default_scope
-        @models.each do |model|
+        models.each do |model|
           # we can't use instance_eval here, because instance_eval adds another class to 
           # the hierchy, while :default_scoping doesn't change in inherited classes
           # because it is defined with class_inheritable_accessor 
@@ -43,15 +54,19 @@ module Multitenant
           model[:name].send :default_scoping=, model[:default_scoping].dup
         end  
       end
-
   end
 
   module ActiveRecordExtensions
     # register the current model with the Multitenant model
     def belongs_to_multitenant(association = :tenant, enforce_on_initialize = true, prevent_changing_tenant = true)
       reflection = reflect_on_association association
-      Multitenant.models << {:name => self, :tenant_key_name => reflection.primary_key_name}
+      model_details = {:name => self, :tenant_key_name => reflection.primary_key_name}
+      Multitenant.models << model_details
 
+      if Multitenant.in_block
+        Multitenant.save_and_change_default_scope model_details
+      end
+      
       if prevent_changing_tenant
         attr_readonly reflection.primary_key_name
 

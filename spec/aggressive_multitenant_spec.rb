@@ -11,6 +11,10 @@ ActiveRecord::Schema.define(:version => 1) do
     t.column :company_id, :integer
   end
 
+  create_table :posts, :force => true do |t|
+    t.string :body
+    t.integer :company_id
+  end
 
   create_table :tenants, :force => true do |t|
     t.column :name, :string
@@ -48,7 +52,19 @@ describe Multitenant do
     it { Multitenant.current_tenant == :foo }
   end
   
-  it "shouldn't fail when no models defined"
+  it "shouldn't fail when no models defined" do
+    models_backup = []
+    Multitenant.instance_eval do
+      models_backup = @models
+      @models = nil
+    end
+    Multitenant.with_tenant @foo do
+    end
+    
+    Multitenant.instance_eval do
+      @models = models_backup
+    end
+  end
 
   describe 'Multitenant.with_tenant block' do
     before do
@@ -221,5 +237,23 @@ describe Multitenant do
       @user.company_id.should == @company.id
     end
   end
-
+  
+  it "should work with named scopes"
+  
+  describe 'When loading new model and already in with_tenant block' do
+    it "should update the default scope for the newly loaded model" do
+      company = Company.create! :name => 'foo'
+      company2 = Company.create! :name => 'bar'
+      
+      Multitenant.with_tenant company do
+        class Post < ActiveRecord::Base
+          belongs_to :company
+          belongs_to_multitenant :company
+        end
+        
+        post = Post.create!
+        post.company.should == company
+      end
+    end
+  end
 end
