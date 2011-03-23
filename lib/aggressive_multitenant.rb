@@ -72,12 +72,12 @@ module Multitenant
 
         # I have to define the following, because attr_readonly only takes affect after reload of the object,
         # hence might introduce a security breach
-        ["#{reflection.name}=", "#{reflection.primary_key_name}="].each do |name| 
-          define_method name do |value|
-            write_attribute name[0..-2], value if new_record?
-            # doing nothing. haha
-          end
-        end
+        # ["#{reflection.name}=", "#{reflection.primary_key_name}="].each do |name|           
+        #   define_method "#{name}" do |value|
+        #     write_attribute name[0..-2], value
+        #     # doing nothing. haha
+        #   end
+        # end
       end
 
       if enforce_on_initialize
