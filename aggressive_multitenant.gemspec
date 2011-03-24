@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Arik Fraimovich", "Ryan Sonnek"]
-  s.date = %q{2011-03-21}
+  s.date = %q{2011-03-24}
   s.description = %q{never let an unscoped Model.all accidentally leak data to an unintended audience.}
   s.email = %q{arik@arikfr.com}
   s.extra_rdoc_files = [
@@ -24,10 +24,10 @@ Gem::Specification.new do |s|
     "README.rdoc",
     "Rakefile",
     "VERSION",
-    "aggressive-multitenant.gemspec",
-    "lib/multitenant.rb",
+    "aggressive_multitenant.gemspec",
+    "lib/aggressive_multitenant.rb",
+    "spec/aggressive_multitenant_spec.rb",
     "spec/database.yml",
-    "spec/multitenant_spec.rb",
     "spec/spec_helper.rb"
   ]
   s.homepage = %q{http://github.com/arikfr/multitenant}
@@ -36,7 +36,7 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.6.0}
   s.summary = %q{scope database queries to current tenant}
   s.test_files = [
-    "spec/multitenant_spec.rb",
+    "spec/aggressive_multitenant_spec.rb",
     "spec/spec_helper.rb"
   ]
 
