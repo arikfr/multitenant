@@ -68,7 +68,7 @@ module Multitenant
       end
       
       if prevent_changing_tenant
-        attr_readonly reflection.primary_key_name
+        # attr_readonly reflection.primary_key_name
 
         # I have to define the following, because attr_readonly only takes affect after reload of the object,
         # hence might introduce a security breach
