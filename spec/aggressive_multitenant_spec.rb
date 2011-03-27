@@ -128,6 +128,12 @@ describe Multitenant do
       @users.should == [@user2]
     end
     
+    it "should not perform the after_initialize test if tenant id not present in query" do
+      Multitenant.with_tenant @company do
+        @company.user_ids.count.should == 1
+      end
+    end
+
     describe "should preserve already set default_scope" do
       before do
         @user3 = @company.users.create! :name => 'hide me', :dummy => 2

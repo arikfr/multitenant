@@ -82,7 +82,7 @@ module Multitenant
 
       if enforce_on_initialize
         after_initialize do
-          if Multitenant.current_tenant
+          if Multitenant.current_tenant && self.attributes.has_key?(reflection.primary_key_name)
             raise AccessException unless eval("self.#{reflection.primary_key_name}") == Multitenant.current_tenant.id
           end
         end
