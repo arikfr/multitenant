@@ -72,9 +72,12 @@ module Multitenant
 
         # I have to define the following, because attr_readonly only takes affect after reload of the object,
         # hence might introduce a security breach
-        # ["#{reflection.name}=", "#{reflection.primary_key_name}="].each do |name|           
-        #   define_method "#{name}" do |value|
-        #     write_attribute name[0..-2], value
+        # ["#{reflection.name}", "#{reflection.primary_key_name}"].each do |name|           
+        #   alias_method "original_#{name}=", "#{name}="
+        #   define_method "#{name}=" do |value|
+        #     puts "Will write the tenant: #{(new_record? || eval(name).nil?)}"
+        #     #write_attribute(name, value) if (new_record? || eval(name).nil?)
+        #     eval("original_#{name}=#{value}") if (new_record? || eval(name).nil?)
         #     # doing nothing. haha
         #   end
         # end
@@ -83,7 +86,8 @@ module Multitenant
       if enforce_on_initialize
         after_initialize do
           if Multitenant.current_tenant && self.attributes.has_key?(reflection.primary_key_name)
-            raise AccessException unless eval("self.#{reflection.primary_key_name}") == Multitenant.current_tenant.id
+            tenant = eval("self.#{reflection.primary_key_name}")
+            raise AccessException unless (tenant.nil? || tenant == Multitenant.current_tenant.id)
           end
         end
       end
