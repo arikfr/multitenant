@@ -87,7 +87,7 @@ module Multitenant
         after_initialize do
           if Multitenant.current_tenant && self.attributes.has_key?(reflection.primary_key_name)
             tenant = eval("self.#{reflection.primary_key_name}")
-            raise AccessException unless (tenant.nil? || tenant == Multitenant.current_tenant.id)
+            raise AccessException, "Expected: #{Multitenant.current_tenant.id}, but got: #{tenant}" unless (tenant.nil? || tenant == Multitenant.current_tenant.id)
           end
         end
       end
