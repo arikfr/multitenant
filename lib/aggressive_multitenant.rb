@@ -14,7 +14,7 @@ module Multitenant
     end
     
     def models
-      @models ||= []
+      @models ||= {} 
       @models
     end
 
@@ -40,13 +40,13 @@ module Multitenant
 
     protected
       def save_and_change_default_scope_for_all
-        models.each do |model|
+        models.values.each do |model|
           save_and_change_default_scope model
         end
       end
 
       def restore_default_scope
-        models.each do |model|
+        models.values.each do |model|
           # we can't use instance_eval here, because instance_eval adds another class to 
           # the hierchy, while :default_scoping doesn't change in inherited classes
           # because it is defined with class_inheritable_accessor 
@@ -61,7 +61,7 @@ module Multitenant
     def belongs_to_multitenant(association = :tenant, enforce_on_initialize = true, prevent_changing_tenant = true)
       reflection = reflect_on_association association
       model_details = {:name => self, :tenant_key_name => reflection.primary_key_name}
-      Multitenant.models << model_details
+      Multitenant.models[self.name] = model_details
 
       if Multitenant.in_block
         Multitenant.save_and_change_default_scope model_details
